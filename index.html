@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Workaround for Steam Workshop file duplication in Arma 3 by Boberro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Workaround for Steam Workshop file duplication in Arma 3</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/Boberro/arma3_workaround" class="btn">View on GitHub</a>
+      <a href="https://github.com/Boberro/arma3_workaround/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Boberro/arma3_workaround/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h2>
+<a id="disclaimer" class="anchor" href="#disclaimer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimer</h2>
+
+<p>This guide was written for players of Onion Gamers (OG) Arma 3 server for BMR Insurgency game mode. It addresses the problem of Steam Workshop file duplication, but isn't in any sense official nor endorced way of dealing with the problem.</p>
+
+<p>Messing up the procedure might make your game unplayable and require reinstallation to fix. In extreme cases (such as deleting windows folder), it might break your computer. Author of this guide, as well as OG, Valve and your local IT guy, refuses to take any responsibility for any damages that may or may not be caused by following this guide.</p>
+
+<h2>
+<a id="what-is-it-all-about" class="anchor" href="#what-is-it-all-about" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is it all about?</h2>
+
+<p>Steam Workshop is great and easy, albeit buggy way of distribution of Arma 3 mods. Unfortunately at this point it doubles disk space taken by mods. Typically Arma 3 keeps it's mods in game folder, while Steam Workshop requires files to be in steam library, under Workshop folder.</p>
+
+<p>Suggested workaround uses <a href="https://technet.microsoft.com/en-us/library/cc753194.aspx">mklink</a> command. We'll create shortcut to workshop folder, that appears to be normal folder, thus removing mod duplicates.</p>
+
+<h2>
+<a id="procedure" class="anchor" href="#procedure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Procedure</h2>
+
+<p><strong>Start with turning Steam off.</strong></p>
+
+<p>Now open the console. To do it, press <strong>Windows</strong> + <strong>R</strong>, then type: <code>cmd</code> <strong>Enter</strong></p>
+
+<p>First thing you want to do, is go to folder common in your Steam library folder. The one your Arma 3 is installed. By default it's on C: drive.</p>
+
+<pre><code>cd "Program Files (x86)\Steam\SteamApps\common"
+</code></pre>
+
+<p>Of course it can be in other folder folder, or other drive. In my case it's D:\SteamLibrary. In this case first switch to other drive.</p>
+
+<pre><code>d:
+cd SteamLibrary\SteamApps\common
+</code></pre>
+
+<p>Before the fun can start, we'll need a backup. Go to Arma 3 folder (normally, with your mouse) and rename folders of all CUP mods. Just add <code>_</code> in front of their names, so you end up with <code>_@CUP Terrains - Core</code>, <code>_@CUP Terrains - Maps</code>, <code>_@CUP Units</code>, <code>_@CUP Vehicles</code>, <code>_@CUP Weapons</code>. Once everything works, we'll delete those folders. For good.</p>
+
+<p>Now back in the console, type in some magic.</p>
+
+<pre><code>mklink /J "common\Arma 3\@CUP Terrains - Core" workshop\content\107410\583496184
+mklink /J "common\Arma 3\@CUP Terrains - Maps" workshop\content\107410\583544987
+mklink /J "common\Arma 3\@CUP Units" workshop\content\107410\497661914
+mklink /J "common\Arma 3\@CUP Vehicles" workshop\content\107410\541888371
+mklink /J "common\Arma 3\@CUP Weapons" workshop\content\107410\497660133
+</code></pre>
+
+<p>If at any point you get following error: Cannot create a file when that file already exists. it means you forgot to rename some of the folders.</p>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>If everything went well, you should have this folders in your Arma 3 folder:</p>
+
+<pre><code>@CUP Terrains - Core
+@CUP Terrains - Maps
+@CUP Units
+@CUP Vehicles
+@CUP Weapons
+_@CUP Terrains - Core
+_@CUP Terrains - Maps
+_@CUP Units
+_@CUP Vehicles
+_@CUP Weapons
+</code></pre>
+
+<p>Now run the game, as you'd normally do and check if everything works. You can, and probably should switch mods profile, but do not change mods loaded by the profile! Launcher should detect five new mods, these are the renamed folders.</p>
+
+<p>Everything works? Great! Now go to Arma 3 folder and remove backed up mods. Delete <code>_@CUP Terrains - Core</code>, <code>_@CUP Terrains - Maps</code>, <code>_@CUP Units</code>, <code>_@CUP Vehicles</code>, <code>_@CUP Weapons</code> folders.</p>
+
+<p>Have fun!</p>
+
+<h2>
+<a id="uninstallation" class="anchor" href="#uninstallation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Uninstallation</h2>
+
+<p>Go to <strong>Arma</strong> folder (do not touch workshop folder) and delete <code>_@CUP Terrains - Core</code>, <code>_@CUP Terrains - Maps</code>, <code>_@CUP Units</code>, <code>_@CUP Vehicles</code>, <code>_@CUP Weapons</code> folders.
+Now Arma Launcher <em>should</em> update missing mods next time you run it (it will just copy workshop files duplicating them once again). If it does not, try verifying local cache and/or resubscribing to the mods. If it does not help, well, you'll have to redownload the mods. You have been warned, remember?</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Boberro/arma3_workaround">Workaround for Steam Workshop file duplication in Arma 3</a> is maintained by <a href="https://github.com/Boberro">Boberro</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
